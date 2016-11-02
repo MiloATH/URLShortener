@@ -4,35 +4,53 @@ var shortid = require('shortid');
 var mongo = require('mongodb').MongoClient;
 var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
-var baseURL = process.env.BASEURL;
+var baseURL = process.env.BASEURL || "";
 var app = express();
 var db;
 console.log(baseURL);
 
 //Set possible id characters
-shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 
 //connect to database
-mongo.connect(dbURI, function(err,data){
-    if(err) throw err;
+mongo.connect(dbURI, function(err, data) {
+    if (err) throw err;
     db = data;
-    app.listen(port, function(){
-        console.log('Listening on port ',port);
+    app.listen(port, function() {
+        console.log('Listening on port', port);
     });
 });
 
-app.get('/new/:uri',function(req,res){
-    var uri = req.params.uri;
-    if(validUrl.isUri(uri)){
+//Set new short url
+app.get('/new/*', function(req, res) {
+    var uri = req.url.slice(5);
+    console.log(uri);
+    if (validUrl.isUri(uri)) {
         var urls = db.collection('urls');
-        var shortUrl = urls.findOne({original:uri});
-        if(1){//Check if there is a result from find //!shortUrl.short){
-            urls.insert({original:uri,short:shortid.generate()});
-            shortUrl = urls.findOne({original:uri});
-        }
-        res.json({original:uri,short: baseURL + shortUrl.short});
+        var short;
+        urls.find({
+            original: uri
+        }).toArray(function(err, url) {
+            if (err) throw err;
+            if (url.length < 1) {
+                short = shortid.generate();
+                urls.insert({
+                    original: uri,
+                    short: short
+                });
+            }
+            else {
+                short = url[0].short;
+            }
+            res.json({
+                original: uri,
+                short: short
+            });
+        });
     }
-    else{
-        res.json({error: "Invalid URL"});
+    else {
+        res.json({
+            error: "Invalid URL"
+        });
     }
-})
+});

@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>URL Shortener</title>
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
+
 <body>
-
-<h1>URL Shortener</h1>
-
+    <div class="container">
+        <h1 class="header">URL Shortener</h1>
+        <h5>
+            By Milo Hartsoe. <a href="https://github.com/MiloATH/URLShortener">Code on Github here</a>.
+        </h5>
+        <h3>Use</h3>
+            <ul>1) Create new shortened URL</ul>
+            <ul>2) JSON response with shortened link and original link</ul>
+            <ul>3) Use the shortened url</ul>
+        
+        <h3>Example</h3>
+        <h5>Create</h5>
+        <code id="create"></code>
+        <h5>Response</h5>
+        <code id="res"></code>
+        <h5>Shortened URL</h5>
+        <code id="link"></code></code>
+        <script type="text/javascript">
+            window.onload = function() {
+                var url = window.location.toString();
+                document.getElementById("create").innerHTML = url + 'new/http://www.google.com';
+                document.getElementById("res").innerHTML = '{"original":"http://www.google.com","short":"' + url + 'P3_yNYEtt"}';
+                document.getElementById("link").innerHTML = url + 'P3_yNYEtt';
+            }
+        </script>
+    </div>
 </body>
+
 </html>

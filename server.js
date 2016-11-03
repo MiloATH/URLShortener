@@ -5,7 +5,7 @@ var path = require('path');
 var mongo = require('mongodb').MongoClient;
 var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
-var baseURL = process.env.BASEURL || "";
+var baseURL = process.env.BASEURL ||'';
 var app = express();
 var db;
 console.log(baseURL);
@@ -25,7 +25,7 @@ mongo.connect(dbURI, function(err, data) {
 //Set new short url
 app.get('/new/*', function(req, res) {
     var uri = req.url.slice(5);
-    console.log(uri);
+    var base = baseURL || ('http://' + req.get('host') + '/');
     if (validUrl.isUri(uri)) {
         var urls = db.collection('urls');
         var short;
@@ -45,7 +45,7 @@ app.get('/new/*', function(req, res) {
             }
             res.json({
                 original: uri,
-                short: short
+                short: base + short
             });
         });
     }

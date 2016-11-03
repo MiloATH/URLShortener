@@ -54,3 +54,21 @@ app.get('/new/*', function(req, res) {
         });
     }
 });
+
+app.get('/:id',function(req,res){
+    var urls = db.collection('urls');
+    console.log('id',req.params.id);
+    var raw = req.params.id;
+    console.log('raw',raw);
+    urls.find({short:raw}).toArray(function(err,arr){
+        if(err) throw err;
+        console.log(arr,raw.toString() , typeof raw);
+        if(arr.length<1){
+            
+            //res.redirect('/');
+        }
+        else{
+            res.redirect(arr[0].original);
+        }
+    })
+})

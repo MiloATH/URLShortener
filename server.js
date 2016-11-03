@@ -1,6 +1,7 @@
 var express = require('express');
 var validUrl = require('valid-url');
 var shortid = require('shortid');
+var path = require('path');
 var mongo = require('mongodb').MongoClient;
 var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
@@ -55,17 +56,34 @@ app.get('/new/*', function(req, res) {
     }
 });
 
-app.get('/:id',function(req,res){
+app.get('/:id', function(req, res) {
     var urls = db.collection('urls');
     var raw = req.params.id;
-    urls.find({short:raw}).toArray(function(err,arr){
-        if(err) throw err;
-        if(arr.length<1){
-            
-            //res.redirect('/');
+    if (shortid.isValid(raw)) {
+        res.redirect('/');
+    }
+    else {
+        urls.find({
+            short: raw
+        }).toArray(function(err, arr) {
+            if (err) throw err;
+            if (arr.length < 1) {
+                res.redirect('/');
+            }
+            else {
+                if (arr.length > 1) throw "One short id to multiple URL";
+                res.redirect(arr[0].original);
+            }
+        })
+    }
+});
+
+app.get('/', function(req, res) {
+    var file = path.join(__dirname, 'index.html');
+    res.sendFile(file, function(err) {
+        if (err) {
+            console.log(err);
+            res.status(err.status).end();
         }
-        else{
-            res.redirect(arr[0].original);
-        }
-    })
-})
+    });
+});

@@ -3,7 +3,7 @@ var validUrl = require('valid-url');
 var shortid = require('shortid');
 var path = require('path');
 var mongo = require('mongodb').MongoClient;
-var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
+var dbURI = process.env.MONGOLAB_URI || require('../../sensitive_data/config').Mongo_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
 var baseURL = process.env.BASEURL ||'';
 var app = express();
@@ -15,6 +15,7 @@ shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 
 //connect to database
 mongo.connect(dbURI, function(err, data) {
+    console.log(dbURI.substr(0,18));
     if (err) throw err;
     db = data;
     app.listen(port, function() {
@@ -55,7 +56,7 @@ app.get('/new/*', function(req, res) {
         });
     }
 });
-
+//Access a page
 app.get('/:id', function(req, res) {
     var urls = db.collection('urls');
     var raw = req.params.id;
@@ -77,7 +78,7 @@ app.get('/:id', function(req, res) {
         })
     }
 });
-
+//home
 app.get('/', function(req, res) {
     var file = path.join(__dirname, 'index.html');
     res.sendFile(file, function(err) {

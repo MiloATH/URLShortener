@@ -8,14 +8,12 @@ var port = process.env.PORT || 3000;
 var baseURL = process.env.BASEURL ||'';
 var app = express();
 var db;
-console.log(baseURL);
 
 //Set possible id characters
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 
 //connect to database
 mongo.connect(dbURI, function(err, data) {
-    console.log(dbURI.substr(0,18));
     if (err) throw err;
     db = data;
     app.listen(port, function() {

@@ -3,9 +3,9 @@ var validUrl = require('valid-url');
 var shortid = require('shortid');
 var path = require('path');
 var mongo = require('mongodb').MongoClient;
-var dbURI = require('../../sensitive_data/config').Mongo_URI || process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
+var dbURI = process.env.MONGOLAB_URI || require('../../sensitive_data/config').Mongo_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
-var baseURL = process.env.BASEURL ||'';
+var baseURL = process.env.BASEURL || '';
 var app = express();
 var db;
 
@@ -14,8 +14,11 @@ shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 
 //connect to database
 mongo.connect(dbURI, function(err, data) {
-    if (err) {console.log(dbURI.substr(0,14));throw err;}
+    if (err) {
+        throw err;
+    }
     db = data;
+    console.log('Connected to db trying to listen on port',port);
     app.listen(port, function() {
         console.log('Listening on port', port);
     });

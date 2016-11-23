@@ -3,7 +3,7 @@ var validUrl = require('valid-url');
 var shortid = require('shortid');
 var path = require('path');
 var mongo = require('mongodb').MongoClient;
-var dbURI = process.env.MONGOLAB_URI || require('../../sensitive_data/config').Mongo_URI || 'mongodb://localhost:27017/url';
+var dbURI = require('../../sensitive_data/config').Mongo_URI || process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
 var baseURL = process.env.BASEURL ||'';
 var app = express();
@@ -14,7 +14,7 @@ shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 
 //connect to database
 mongo.connect(dbURI, function(err, data) {
-    if (err) throw err;
+    if (err) {console.log(dbURI.substr(0,14));throw err;}
     db = data;
     app.listen(port, function() {
         console.log('Listening on port', port);
@@ -58,7 +58,7 @@ app.get('/new/*', function(req, res) {
 app.get('/:id', function(req, res) {
     var urls = db.collection('urls');
     var raw = req.params.id;
-    if (shortid.isValid(raw)) {
+    if (!shortid.isValid(raw)) {
         res.redirect('/');
     }
     else {

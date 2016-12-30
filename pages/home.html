@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/home.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">URL Shortener</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                    <li><a href="/api">API</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="header">URL Shortener</h1>
+        <div class="row">
+            <div class="col-lg-12">
+                Long URL
+                <div class="input-group">
+                    <input type="text" class="form-control" id="long-url" placeholder="Long url">
+                </div>
+                Prefered Shortened URL (Optional. Random letters and numbers generated otherwise)
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon3 site"></span>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                </div>
+                <button class="btn btn-default" onClick="requestShrt()" type="button">Get Short URL!</button>
+                <div class="alert" id="response-alert" role="alert">
+                    <p class="response" id="response"></p>
+                </div>
+            </div>
+        </div>
+        <footer>
+
+            <h5>
+                By Milo Hartsoe. <a href="https://github.com/MiloATH/URLShortener">Code on Github here</a>.
+            </h5>
+        </footer>
+    </div>
+    <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+    <script src='static/home.js'></script>
+</body>
+
+</html>

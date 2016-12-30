@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">URL Shortener</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li class="active"><a href="/api">API<span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="header">URL Shortener</h1>
+        <h3>Use</h3>
+
+        <ol type="1">
+            <li>Create new shortened URL</li>
+            <li>JSON response with shortened link and original link</li>
+            <li>Use the shortened url</li>
+        </ol>
+
+        <h3>Example</h3>
+        <ul style="list-style-type:none">
+            <li>Create</li>
+            <code id="create"></code>
+            <li>Response</li>
+            <code id="res"></code>
+            <li>Shortened URL</li>
+            <code id="link"></code></code>
+        </ul>
+        <footer>
+            <h5>
+                By Milo Hartsoe. <a href="https://github.com/MiloATH/URLShortener">Code on Github here</a>.
+            </h5>
+        </footer>
+        <script type="text/javascript">
+            window.onload = function() {
+                var url = window.location.toString();
+                document.getElementById("create").innerHTML = url + 'new/http://www.google.com';
+                document.getElementById("res").innerHTML = '{"original":"http://www.google.com","short":"' + url + 'FWd8mJ00m"}';
+                document.getElementById("link").innerHTML = url + 'FWd8mJ00m';
+            }
+        </script>
+        <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+        <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+    </div>
+</body>
+
+</html>

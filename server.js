@@ -23,6 +23,9 @@ mongo.connect(dbURI, function(err, data) {
     });
 });
 
+//Serve static content
+app.use('/static', express.static(path.join(__dirname, 'public')))
+
 //Set new short url
 app.get('/new/*', function(req, res) {
     var uri = req.url.slice(5);
@@ -30,6 +33,7 @@ app.get('/new/*', function(req, res) {
     if (validUrl.isUri(uri)) {
         var urls = db.collection('urls');
         var short;
+        //See if there already exists a short for the  uri
         urls.find({
             original: uri
         }).toArray(function(err, url) {
@@ -56,35 +60,84 @@ app.get('/new/*', function(req, res) {
         });
     }
 });
-//Access a page
-app.get('/:id', function(req, res) {
-    var urls = db.collection('urls');
-    var raw = req.params.id;
-    if (!shortid.isValid(raw)) {
-        res.redirect('/');
-    }
-    else {
+
+//Create custom shortened URL.
+//This will try to use a custom id for short.
+//NOTE: Custom should be uri encoded and not have any escape characters.
+app.get('/newCustom/:custom/old/*', function(req, res) {
+    //Custom could be any length. So, /old/ is used as an anchor
+    var indexOfOld = req.url.indexOf('/old/') + 5;
+    var uri = req.url.substring(indexOfOld);
+    var idealShort = req.params.custom;
+    var base = baseURL || ('http://' + req.get('host') + '/');
+    if (validUrl.isUri(uri)) {
+        var urls = db.collection('urls');
+        //Check custom short isn't already taken.
         urls.find({
-            short: raw
-        }).toArray(function(err, arr) {
+            short: idealShort
+        }).toArray(function(err, url) {
             if (err) throw err;
-            if (arr.length < 1) {
-                res.redirect('/');
+            if (url.length < 1) {
+                urls.insert({
+                    original: uri,
+                    short: idealShort
+                });
+                res.json({
+                    original: uri,
+                    short: base + idealShort
+                });
             }
             else {
-                if (arr.length > 1) throw "One short id to multiple URL";
-                res.redirect(arr[0].original);
+                res.json({
+                    error: ('The short ' + idealShort + ' is already taken.')
+                })
             }
-        })
+        });
     }
-});
-//home
-app.get('/', function(req, res) {
-    var file = path.join(__dirname, 'index.html');
+    else {
+        res.json({
+            error: "Invalid URL"
+        });
+    }
+})
+
+//API home
+app.get('/api', function(req, res) {
+    var file = path.join(__dirname, 'pages/index.html');
     res.sendFile(file, function(err) {
         if (err) {
             console.log(err);
             res.status(err.status).end();
         }
     });
+});
+
+//gui home to create shortened urls
+app.get('/', function(req, res) {
+    var file = path.join(__dirname, 'pages/home.html');
+    res.sendFile(file, function(err) {
+        if (err) {
+            console.log(err);
+            res.status(err.status).end();
+        }
+    });
+})
+
+
+//Access a page through the short
+app.get('/:id', function(req, res) {
+    var urls = db.collection('urls');
+    var raw = req.params.id;
+    urls.find({
+        short: raw
+    }).toArray(function(err, arr) {
+        if (err) throw err;
+        if (arr.length < 1) {
+            res.redirect('/');
+        }
+        else {
+            if (arr.length > 1) throw "One short id to multiple URL";
+            res.redirect(arr[0].original);
+        }
+    })
 });

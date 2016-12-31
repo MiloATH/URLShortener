@@ -1,7 +1,7 @@
 /*global $*/
 window.onload = function() {
     var url = window.location.toString();
-    document.getElementById("basic-addon3 site").textContent = url.replace("http://www.", "");
+    document.getElementById("basic-addon3 site").textContent = url.replace("http://", "");
 }
 
 function requestShrt() {
@@ -36,7 +36,7 @@ function requestShrt() {
                     }
                 }
                 else {
-                    var shortURL = result.short.replace("http://www.", "");
+                    var shortURL = result.short.replace("http://", "");
                     $("#response").text('The new short ' + shortURL + ' redirects to ' + result.original);
                     $(".short-url").attr('href',shortURL).text(shortURL);
                     $("#response-alert").addClass('alert-success');

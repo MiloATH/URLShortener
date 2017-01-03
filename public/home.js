@@ -2,15 +2,14 @@
 window.onload = function() {
     var url = window.location.toString();
     document.getElementById("basic-addon3 site").textContent = url;
-}
-
-var spinner = "<"
+};
 
 function requestShrt() {
+    $(".short-url").text("");
     $("#response-alert").removeClass('alert-danger');
     $("#response-alert").removeClass('alert-success');
     $(".loader").css({
-        "visibility": "visible"
+        "display": "inline-block"
     });
     $("#response").text("");
     var long = $('#long-url').val();
@@ -18,7 +17,7 @@ function requestShrt() {
     if (!long) {
 
         $(".loader").css({
-            "visibility": "hidden"
+            "display": "none"
         });
         $("#response-alert").addClass('alert-danger');
         $("#response").text('Please provide a url');
@@ -36,7 +35,7 @@ function requestShrt() {
             url: url,
             success: function(result) {
                 $(".loader").css({
-                    "visibility": "hidden"
+                    "display": "none"
                 });
                 if (result.error) {
                     $("#response").text(result.error);
@@ -60,3 +59,9 @@ function requestShrt() {
         });
     }
 }
+
+$(document).keypress(function(e) {
+    if (e.which == 13) {
+        requestShrt();
+    }
+});

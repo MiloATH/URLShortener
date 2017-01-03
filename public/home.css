@@ -10,3 +10,19 @@
     width: 100%;
 }
 
+.loader {
+    display: inline-block;
+    margin: auto;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border-top: solid black 3px;
+    animation: cir 1s linear infinite;
+    -webkit-animation: cir 1s linear infinite;
+}
+
+@keyframes cir {
+    100% {
+        transform: rotate(360deg);
+    }
+}

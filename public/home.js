@@ -1,7 +1,7 @@
 /*global $*/
 window.onload = function() {
-    var url = window.location.toString();
-    document.getElementById("basic-addon3 site").textContent = url;
+    var url = window.location.origin.toString();
+    document.getElementById("basic-addon3 site").textContent = url + '/';
 };
 
 function requestShrt() {
@@ -25,10 +25,10 @@ function requestShrt() {
     else {
         var url;
         if (short) {
-            url = window.location.toString() + 'newCustom/' + short + '/old/' + long;
+            url = window.location.origin.toString() + '/newCustom/' + short + '/old/' + long;
         }
         else {
-            url = window.location.toString() + 'new/' + long;
+            url = window.location.origin.toString() + '/new/' + long;
         }
         console.log(url);
         $.ajax({

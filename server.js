@@ -24,7 +24,7 @@ mongo.connect(dbURI, function(err, data) {
 });
 
 //Serve static content
-app.use('/static', express.static(path.join(__dirname, 'public')))
+app.use('/static', express.static(path.join(__dirname, 'public')));
 
 //Set new short url
 app.get('/new/*', function(req, res) {
@@ -90,7 +90,7 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
             else {
                 res.json({
                     error: ('The short ' + idealShort + ' is already taken.')
-                })
+                });
             }
         });
     }
@@ -99,7 +99,7 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
             error: "Invalid URL"
         });
     }
-})
+});
 
 //API home
 app.get('/api', function(req, res) {
@@ -121,7 +121,7 @@ app.get('/', function(req, res) {
             res.status(err.status).end();
         }
     });
-})
+});
 
 
 //Access a page through the short
@@ -136,8 +136,8 @@ app.get('/:id', function(req, res) {
             res.redirect('/');
         }
         else {
-            if (arr.length > 1) throw "One short id to multiple URL";
+            if (arr.length > 1) throw ("One short id to multiple URL. Short ID: " + raw) ;
             res.redirect(arr[0].original);
         }
-    })
+    });
 });

@@ -70,7 +70,7 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
     var uri = req.url.substring(indexOfOld);
     var idealShort = req.params.custom;
     var base = baseURL || ('http://' + req.get('host') + '/');
-    if (validUrl.isUri(uri)) {
+    if (validUrl.isUri(uri) && idealShort && uri) {
         var urls = db.collection('urls');
         //Check custom short isn't already taken.
         urls.find({
@@ -96,7 +96,7 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
     }
     else {
         res.json({
-            error: "Invalid URL"
+            error: "Invalid Input"
         });
     }
 });

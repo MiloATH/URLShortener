@@ -3,9 +3,9 @@ var validUrl = require('valid-url');
 var shortid = require('shortid');
 var path = require('path');
 var mongo = require('mongodb').MongoClient;
-var dbURI = process.env.MONGOLAB_URI || require('../../sensitive_data/config').Mongo_URI || 'mongodb://localhost:27017/url';
+var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
-var baseURL = process.env.BASEURL || '';
+var baseURL = process.env.BASEURL;
 var app = express();
 var db;
 
@@ -27,9 +27,9 @@ mongo.connect(dbURI, function(err, data) {
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
 //Set new short url
-app.get('/new/*', function(req, res) {
-    var uri = req.url.slice(5);
-    var base = baseURL || ('http://' + req.get('host') + '/');
+app.get('/new/:id', function(req, res) {
+    var uri = req.params.id;
+    var base = baseURL || ('http://' + app.get('host') + '/');
     if (validUrl.isUri(uri)) {
         var urls = db.collection('urls');
         var short;
@@ -44,8 +44,7 @@ app.get('/new/*', function(req, res) {
                     original: uri,
                     short: short
                 });
-            }
-            else {
+            } else {
                 short = url[0].short;
             }
             res.json({
@@ -53,8 +52,7 @@ app.get('/new/*', function(req, res) {
                 short: base + short
             });
         });
-    }
-    else {
+    } else {
         res.json({
             error: "Invalid URL"
         });
@@ -69,7 +67,7 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
     var indexOfOld = req.url.indexOf('/old/') + 5;
     var uri = req.url.substring(indexOfOld);
     var idealShort = req.params.custom;
-    var base = baseURL || ('http://' + req.get('host') + '/');
+    var base = baseURL || ('http://' + app.get('host') + '/');
     if (validUrl.isUri(uri) && idealShort && uri) {
         var urls = db.collection('urls');
         //Check custom short isn't already taken.
@@ -82,19 +80,18 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
                     original: uri,
                     short: idealShort
                 });
+                console.log(idealShort);
                 res.json({
                     original: uri,
                     short: base + idealShort
                 });
-            }
-            else {
+            } else {
                 res.json({
                     error: ('The short ' + idealShort + ' is already taken.')
                 });
             }
         });
-    }
-    else {
+    } else {
         res.json({
             error: "Invalid Input"
         });
@@ -134,9 +131,8 @@ app.get('/:id', function(req, res) {
         if (err) throw err;
         if (arr.length < 1) {
             res.redirect('/');
-        }
-        else {
-            if (arr.length > 1) throw ("One short id to multiple URL. Short ID: " + raw) ;
+        } else {
+            if (arr.length > 1) throw ("One short id to multiple URL. Short ID: " + raw);
             res.redirect(arr[0].original);
         }
     });

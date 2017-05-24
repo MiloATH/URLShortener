@@ -21,13 +21,16 @@ function requestShrt() {
         });
         $("#response-alert").addClass('alert-danger');
         $("#response").text('Please provide a url');
-    }
-    else {
-        var url;
+    } else {
+        //Check for http or https in url
+        var httpTest = /^((http|https):\/\/)/;
+        if (!httpTest.test(long)) {
+            long = "http://" + long;
+        }
+        console.log(long);
         if (short) {
             url = window.location.origin.toString() + '/newCustom/' + short + '/old/' + long;
-        }
-        else {
+        } else {
             url = window.location.origin.toString() + '/new/' + long;
         }
         console.log(url);
@@ -46,8 +49,7 @@ function requestShrt() {
                     if (result.error.indexOf("Invalid URL") != -1) {
                         $('#long-url').val("");
                     }
-                }
-                else {
+                } else {
                     var shortURL = result.short;
                     $("#response").text('The new short ' + shortURL + ' redirects to ' + result.original);
                     $(".short-url").attr('href', shortURL).text(shortURL);

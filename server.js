@@ -27,8 +27,8 @@ mongo.connect(dbURI, function(err, data) {
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
 //Set new short url
-app.get('/new/:id', function(req, res) {
-    var uri = req.params.id;
+app.get('/new/*', function(req, res) {
+    var uri = req.url.slice(5); //5 because '/new/' has a length of 5.
     var base = baseURL || ('http://' + app.get('host') + '/');
     if (validUrl.isUri(uri)) {
         var urls = db.collection('urls');
@@ -80,7 +80,6 @@ app.get('/newCustom/:custom/old/*', function(req, res) {
                     original: uri,
                     short: idealShort
                 });
-                console.log(idealShort);
                 res.json({
                     original: uri,
                     short: base + idealShort

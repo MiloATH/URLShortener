@@ -15,7 +15,6 @@ function requestShrt() {
     var long = $('#long-url').val();
     var short = $('#basic-url').val();
     if (!long) {
-
         $(".loader").css({
             "display": "none"
         });
@@ -27,13 +26,11 @@ function requestShrt() {
         if (!httpTest.test(long)) {
             long = "http://" + long;
         }
-        console.log(long);
         if (short) {
             url = window.location.origin.toString() + '/newCustom/' + short + '/old/' + long;
         } else {
             url = window.location.origin.toString() + '/new/' + long;
         }
-        console.log(url);
         $.ajax({
             url: url,
             success: function(result) {

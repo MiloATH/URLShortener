@@ -1,13 +1,15 @@
 var express = require('express');
-var validUrl = require('valid-url');
-var shortid = require('shortid');
-var path = require('path');
+var helmet = require('helmet')
 var mongo = require('mongodb').MongoClient;
+var path = require('path');
+var shortid = require('shortid');
+var validUrl = require('valid-url');
 var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url';
 var port = process.env.PORT || 3000;
 var baseURL = process.env.BASEURL;
 var app = express();
 var db;
+
 
 //Set possible id characters
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
@@ -25,6 +27,9 @@ mongo.connect(dbURI, function(err, data) {
 
 //Serve static content
 app.use('/static', express.static(path.join(__dirname, 'public')));
+
+// Use helmet
+app.use(helmet());
 
 //Set new short url
 app.get('/new/*', function(req, res) {

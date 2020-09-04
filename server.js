@@ -19,7 +19,7 @@ mongo.connect(dbURI, function(err, data) {
     if (err) {
         throw err;
     }
-    db = data;
+    db = data.db('urls');
     app.listen(port, function() {
         console.log('Listening on port', port);
     });

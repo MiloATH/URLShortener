@@ -1,5 +1,5 @@
 # URLShortener
-This app allows for random and custom short urls that redirect to a desired site. The app is currently live [here](https://urlshr.herokuapp.com/).
+This app allows for random and custom short urls that redirect to a desired site. The app is no longer live.
 
 
 ## Use
@@ -10,10 +10,10 @@ JSON response with shortened link and original link
 Use the shortened url
 ## Example
 Create:
-https://urlshr.herokuapp.com/new/http://www.google.com
+https://<domain>/new/http://www.google.com
 
 Response:
-{"original":"http://www.google.com","short":"https://urlshr.herokuapp.com/g"}
+{"original":"http://www.google.com","short":"https://<domain>/g"}
 
 Shortened URL:
-https://urlshr.herokuapp.com/g
+https://<domain>/g
